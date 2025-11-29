@@ -1,0 +1,72 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@section Styles {
+}
+<div class="text-center">
+    <div id="main" style="width: 600px;height:400px;"></div>
+</div>
+@section Scripts {
+    <script src="~/lib/echarts/echarts.min.js"></script>
+    <script src="~/lib/echarts/theme/dark.min.js"></script>
+    <script src="~/lib/echarts/extension/datatool.min.js"></script>
+    <script>
+        $(function(){
+            console.log("Document is ready.");
+            initChart(); // Fixed: Added parentheses
+        });
+
+        function initChart(){
+            console.log("Initializing chart...");
+            var myChart = echarts.init(document.getElementById('main'));
+            var url = "http://localhost:5117/api/orderdatas/5";
+            
+            $.get(url).done(function(data) {
+                console.log("Data fetched from API:");
+                console.log(data);
+                
+                // Transform the data for pie chart
+                var pieData = data.map(function(item) {
+                    return {
+                        name: item.country,
+                        value: item.amount
+                    };
+                });
+        
+                myChart.setOption({
+                    title: {
+                        text: 'Countries Sales Dashboard',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                    },
+                    series: [
+                        {
+                            name: 'Sales',
+                            type: 'pie',
+                            radius: '50%',
+                            data: pieData,
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                });
+            }).fail(function(error) {
+                console.error("Error fetching data:", error);
+            });
+        }
+    </script>
+}
