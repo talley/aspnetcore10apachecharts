@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Welcome to ECharts Demo";
 }
 @section Styles {
 }
@@ -15,7 +15,7 @@
     <script>
         $(function(){
             console.log("Document is ready.");
-            initChart(); // Fixed: Added parentheses
+            initChart(); 
         });
 
         function initChart(){
@@ -27,7 +27,7 @@
                 console.log("Data fetched from API:");
                 console.log(data);
                 
-                // Transform the data for pie chart
+           
                 var pieData = data.map(function(item) {
                     return {
                         name: item.country,
